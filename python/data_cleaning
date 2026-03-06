@@ -1,0 +1,163 @@
+import pandas as pd
+import numpy as np
+import os
+
+print("\n===== NETFLIX DATA CLEANING PIPELINE =====\n")
+
+# -----------------------------
+# Paths
+# -----------------------------
+RAW_PATH = "data/raw/"
+PROCESSED_PATH = "data/processed/"
+
+os.makedirs(PROCESSED_PATH, exist_ok=True)
+
+# -----------------------------
+# Load datasets
+# -----------------------------
+users = pd.read_csv(RAW_PATH + "users.csv")
+movies = pd.read_csv(RAW_PATH + "movies.csv")
+watch_history = pd.read_csv(RAW_PATH + "watch_history.csv")
+search_logs = pd.read_csv(RAW_PATH + "search_logs.csv")
+reviews = pd.read_csv(RAW_PATH + "reviews.csv")
+recommendation_logs = pd.read_csv(RAW_PATH + "recommendation_logs.csv")
+
+# -----------------------------
+# General cleaning function
+# -----------------------------
+def basic_clean(df):
+
+    # Remove duplicated rows
+    df = df.drop_duplicates()
+
+    # Remove fully empty rows
+    df = df.dropna(how="all")
+
+    # Strip strings
+    for col in df.select_dtypes(include="object"):
+        df[col] = df[col].str.strip()
+
+    return df
+
+
+users = basic_clean(users)
+movies = basic_clean(movies)
+watch_history = basic_clean(watch_history)
+search_logs = basic_clean(search_logs)
+reviews = basic_clean(reviews)
+recommendation_logs = basic_clean(recommendation_logs)
+
+# -----------------------------
+# USERS cleaning
+# -----------------------------
+print("Cleaning users...")
+
+if "age" in users.columns:
+    users = users[(users["age"] >= 13) & (users["age"] <= 90)]
+
+if "subscription_plan" in users.columns:
+    users["subscription_plan"] = users["subscription_plan"].str.lower()
+
+users = users.drop_duplicates(subset="user_id")
+
+# -----------------------------
+# MOVIES cleaning
+# -----------------------------
+print("Cleaning movies...")
+
+movies = movies.drop_duplicates(subset="movie_id")
+
+# -----------------------------
+# WATCH HISTORY cleaning
+# -----------------------------
+print("Cleaning watch_history...")
+
+if "watch_time_minutes" in watch_history.columns:
+    watch_history = watch_history[watch_history["watch_time_minutes"] > 0]
+
+# Convert timestamps
+for col in watch_history.columns:
+    if "time" in col.lower() or "date" in col.lower():
+        try:
+            watch_history[col] = pd.to_datetime(watch_history[col])
+        except:
+            pass
+
+# Remove duplicate watch events
+if {"user_id","movie_id"}.issubset(watch_history.columns):
+    watch_history = watch_history.drop_duplicates(
+        subset=["user_id","movie_id"]
+    )
+
+# -----------------------------
+# SEARCH LOGS cleaning
+# -----------------------------
+print("Cleaning search_logs...")
+
+if "search_query" in search_logs.columns:
+    search_logs = search_logs[search_logs["search_query"].str.len() > 1]
+
+# -----------------------------
+# REVIEWS cleaning
+# -----------------------------
+print("Cleaning reviews...")
+
+if "rating" in reviews.columns:
+    reviews = reviews[(reviews["rating"] >= 1) & (reviews["rating"] <= 5)]
+
+# -----------------------------
+# RECOMMENDATION LOGS cleaning
+# -----------------------------
+print("Cleaning recommendation_logs...")
+
+recommendation_logs = recommendation_logs.drop_duplicates()
+
+# -----------------------------
+# Referential integrity checks
+# -----------------------------
+print("Validating relational integrity...")
+
+if "user_id" in watch_history.columns:
+    watch_history = watch_history[
+        watch_history["user_id"].isin(users["user_id"])
+    ]
+
+if "movie_id" in watch_history.columns:
+    watch_history = watch_history[
+        watch_history["movie_id"].isin(movies["movie_id"])
+    ]
+
+if "user_id" in reviews.columns:
+    reviews = reviews[
+        reviews["user_id"].isin(users["user_id"])
+    ]
+
+# -----------------------------
+# Final summary
+# -----------------------------
+datasets = {
+    "users_clean": users,
+    "movies_clean": movies,
+    "watch_history_clean": watch_history,
+    "search_logs_clean": search_logs,
+    "reviews_clean": reviews,
+    "recommendation_logs_clean": recommendation_logs
+}
+
+print("\n===== CLEANED DATA SUMMARY =====")
+
+for name, df in datasets.items():
+    print(name, df.shape)
+
+# -----------------------------
+# Save processed data
+# -----------------------------
+for name, df in datasets.items():
+
+    path = PROCESSED_PATH + name + ".csv"
+
+    df.to_csv(path, index=False)
+
+    print("Saved:", path)
+
+print("\n===== CLEANING PIPELINE COMPLETE =====")
