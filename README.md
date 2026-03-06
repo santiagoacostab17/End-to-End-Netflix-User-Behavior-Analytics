@@ -1,148 +1,145 @@
-Netflix User Behavior Analytics
-End-to-End Data Analysis & Churn Prediction
+# 🎬 Netflix User Behavior Analytics
 
-Data science project analyzing large-scale user behavior from a streaming platform to understand engagement, retention, and churn risk.
+### End-to-End Data Analysis & Predictive Modeling
 
-The project implements a complete analytics pipeline, from raw data ingestion to machine learning modeling.
+![Python](https://img.shields.io/badge/Python-3.10+-blue)
+![Pandas](https://img.shields.io/badge/Pandas-Data%20Analysis-orange)
+![Scikit-Learn](https://img.shields.io/badge/Machine%20Learning-ScikitLearn-green)
 
-Dataset
+---
 
-Source
+## 📊 Project Overview
 
-Kaggle – Netflix 2025 User Behavior Dataset (~210K records)
+This project analyzes **Netflix user behavior data (~210K records)** to understand engagement, detect churn drivers, and build predictive models.
 
-The dataset simulates activity within a streaming platform and includes:
+The goal is to demonstrate a **complete data science workflow**, from raw data to machine learning insights.
 
-User profiles
+---
 
-Watch history
+## 🎯 Objectives
 
-Search activity
+* Measure **user engagement and retention**
+* Identify **high-value user segments**
+* Detect **key churn drivers**
+* Build **predictive churn models**
+* Deliver a **clean and reproducible analytics pipeline**
 
-Reviews
+---
 
-Recommendation logs
+## 🗂 Dataset
 
-Project Goals
+**Netflix 2025 User Behavior Dataset**
 
-Analyze user engagement patterns
+Features include:
 
-Measure churn and retention
+* User activity metrics
+* Watch time
+* Subscription type
+* Session behavior
+* Engagement patterns
+* Churn indicator
 
-Identify behavioral drivers of churn
+Dataset size: **~210,000 rows**
 
-Segment users based on engagement
+---
 
-Build predictive churn models
+## ⚙️ Workflow
 
-Data Pipeline
+### 1️⃣ Data Cleaning
 
-Raw Data
-↓
-Data Validation & Cleaning
-↓
-Feature Engineering
-↓
-Exploratory Data Analysis
-↓
-User Segmentation
-↓
-Churn Prediction Models
+* Missing value handling
+* Duplicate removal
+* Outlier detection
+* Data validation
 
-Project Structure
-Netflix-User-Analytics/
+### 2️⃣ Feature Engineering
+
+* Behavioral metrics
+* Temporal features
+* Engagement indicators
+
+### 3️⃣ Exploratory Data Analysis
+
+* User segmentation
+* Correlation analysis
+* Behavioral patterns
+
+### 4️⃣ KPI Metrics
+
+Key metrics computed:
+
+* **Churn Rate**
+* **Retention Rate**
+* **Average Watch Time**
+* **ARPU (Average Revenue Per User)**
+
+### 5️⃣ Predictive Modeling
+
+Models used:
+
+```python
+Logistic Regression
+Random Forest
+Gradient Boosting
+```
+
+Goal: **predict churn probability**
+
+---
+
+## 📈 Key Insights
+
+Examples of insights extracted:
+
+* High session frequency → **lower churn probability**
+* Low engagement users → **highest churn risk**
+* Premium users show **higher retention**
+
+---
+
+## 🛠 Tech Stack
+
+* **Python**
+* **Pandas**
+* **NumPy**
+* **Matplotlib / Seaborn**
+* **Scikit-Learn**
+
+---
+
+## 📂 Project Structure
+
+```
+netflix-user-analytics/
 
 data/
-    raw/
-    processed/
-    features/
-
-scripts/
-    01_data_cleaning.py
-    02_feature_engineering.py
-    03_churn_modeling.py
-    04_user_segmentation.py
-    05_retention_analysis.py
+    netflix_user_behavior.csv
 
 notebooks/
     eda.ipynb
+    feature_engineering.ipynb
+
+models/
+    churn_model.pkl
+
+scripts/
+    data_cleaning.py
+    train_model.py
 
 README.md
-Feature Engineering
+```
 
-User-level behavioral features were created, including:
+---
 
-Total watch time
+## 🚀 Future Improvements
 
-Average watch duration
+* Deploy churn model with **API**
+* Add **customer lifetime value prediction**
+* Implement **dashboard visualization**
 
-Session frequency
+---
 
-Unique content consumption
+## 💡 Author
 
-Search activity
-
-Review engagement
-
-Recency of activity
-
-These features form the churn prediction dataset used for modeling.
-
-Machine Learning
-
-Three models were trained to predict churn:
-
-Logistic Regression
-
-Random Forest
-
-Gradient Boosting
-
-Evaluation metrics:
-
-ROC-AUC
-
-Precision
-
-Recall
-
-F1 Score
-
-User Segmentation
-
-K-Means clustering was applied to identify behavioral segments such as:
-
-Power users
-
-Casual viewers
-
-At-risk users
-
-New users
-
-This reveals different engagement patterns across the platform.
-
-Retention Analysis
-
-Cohort analysis was performed to measure user retention over time.
-
-A retention heatmap visualizes how engagement evolves after users join the platform.
-
-Key Insights
-
-Example findings from the analysis:
-
-Engagement decay predicts churn better than total watch time
-
-Frequent short sessions correlate with higher retention
-
-Early behavioral shifts can signal churn risk weeks in advance
-
-Tech Stack
-
-Python
-Pandas
-NumPy
-Scikit-learn
-Matplotlib
-Seaborn
+**Santiago Acosta**
+Data Analytics & Machine Learning Projects
